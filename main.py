@@ -28,7 +28,6 @@ def parse_cols(cols):
 def cols_to_keep(filename, cols):
     raw_file = open(filename, "r")
     result = ""
-    print(cols)
     for line in raw_file:
         new_list_of_strings = []
         list_of_strings = line.split(",")
@@ -36,7 +35,6 @@ def cols_to_keep(filename, cols):
         for string in list_of_strings:
             new_string = string.replace("\n", "")
             new_list_of_strings.append(new_string)
-        print(new_list_of_strings)
         result = result + ','.join(new_list_of_strings) + "\n"
     raw_file.close()
 
@@ -55,7 +53,6 @@ def delete_first_row(filename):
         for string in list_of_strings:
             new_string = string.replace("\n", "")
             new_list_of_strings.append(new_string)
-        print(new_list_of_strings)
         result = result + ','.join(new_list_of_strings) + "\n"
     raw_file.close()
 
@@ -117,7 +114,6 @@ def check_path(filename):
         return filename
 
 def modify_csv(filename, delete_h=False, delete_first_r=False, cols=None):
-    print(cols)
     if delete_h == "yes":
         delete_headers(filename)
     if delete_first_r == "yes":
@@ -148,7 +144,7 @@ def open_sql(filename, type_of_group):
         if match != None and not "`" in match.group():
             raw_list_of_items = re.findall('([^(,)]+)(?!.*\()', match.group())
             result = result + ','.join(raw_list_of_items) + "\n"
-    return True
+    return result
 
 def read_file(filename, type_of_group=None, params=[]):
     if ".json" in filename:
@@ -169,9 +165,7 @@ def create_pipeline_file(path):
 def call_logstash(config_file):
     try:
         command = f"logstash -f {config_file}"
-        print(command)
         process = subprocess.Popen(command, shell=True)
-        print(process)
         print("Pipeline executed successfully")
         return True
     except Exception as e:
